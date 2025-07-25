@@ -2,44 +2,55 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String arrowLeft  = "<--<<";
-        String arrowRight = ">>-->";
+        int MAX_LEN_LINE = 106;
+        String arrowLeft  = "<--<<";  // если шаблон изменится, обратить внимание на строку 37 (метка l1)
+        String arrowRight = ">>-->";  // если шаблон изменится, обратить внимание на строку 49 (метка l2)
         int lengthLeft  = arrowLeft.length();
         int lengthRight = arrowRight.length();
         Scanner scanner = new Scanner( System.in );
-        System.out.printf( "Введите калиберду : " );
-        String text = scanner.next();
+
+        System.out.printf( "Введите строку с стрелочками : " );
+        String text = scanner.nextLine();
+
+        if ( text.length() > MAX_LEN_LINE ) {
+            System.out.println( "Введена слишком длинная строка, оставляем первые " + MAX_LEN_LINE + " символов" );
+            text = text.substring( 0 , MAX_LEN_LINE );
+            System.out.println( "Осталось от строки: " + text );
+        }
+
+        String str;
         int index;
+        int lenText;
         int poz = 0;
-        int countLeft  = 0;
+        int countLeft = 0;
         int countRight = 0;
-                
-        while ( true ) {
-            index = text.indexOf( arrowLeft , poz );
+        int i;
 
-            if ( index == -1 ) {
-                break;
-            } else {
+        /* Считаем стрелки влево  */
+        lenText = text.length() - lengthLeft + 1;
+
+        for ( i = 0 ; i < lenText ; i++ ) {
+            str = text.substring( i , i + lengthLeft );
+
+            if ( str.equals( arrowLeft ) ) {
                 countLeft++;
-                poz = index + lengthLeft;
+l1:             i += 3; // если шаблон стрелки поменяется, то эту строку удалить или число скорректировать
             }
         }
 
-        poz = 0;
+        /* Считаем стрелки вправо  */
+        lenText = text.length() - lengthRight + 1;
 
-        while ( true ) {
-            index = text.indexOf( arrowRight , poz );
+        for ( i = 0 ; i < lenText ; i++ ) {
+            str = text.substring( i , i + lengthRight );
 
-            if ( index == -1 ) {
-                break;
-            } else {
+            if ( str.equals( arrowRight ) ) {
                 countRight++;
-                poz += index + lengthRight;
+l2:             i += 3; // если шаблон стрелки поменяется, то эту строку удалить или число скорректировать
             }
         }
 
-        System.out.println( arrowLeft + " : " + countLeft );
-        System.out.println( arrowRight + " : " + countRight );
+        System.out.println( arrowLeft + " : " + countLeft + " и " + arrowRight + " : " + countRight);
 
         scanner.close();
     }
